@@ -24,24 +24,24 @@ public class PersonDAO {
                 new BeanPropertyRowMapper<>(Person.class));
     } // получение данных
 
-    public Optional<Person> show(String email) {
+    public Optional<Person> info(String email) {
         return jdbcTemplate.query("SELECT * FROM person WHERE email=?", new Object[] {email},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 
-    public Person show(int id) {
+    public Person info(int id) {
         return jdbcTemplate.query("SELECT * FROM person WHERE id=?", new Object[]{id},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
     }
 
     public void save(Person person) {
         jdbcTemplate.update("INSERT INTO person(name, age, email) VALUES(?, ?, ?)",
-                person.getName(), person.getAge(), person.getEmail(), person.getAddress());
+                person.getName(), person.getAge(), person.getEmail());
     }
 
     public void update(int id, Person updatedPerson) {
         jdbcTemplate.update("UPDATE person SET name=?, age=?, email=? WHERE id=?",
-                updatedPerson.getName(), updatedPerson.getAge(), updatedPerson.getEmail(), updatedPerson.getAddress(), id);
+                updatedPerson.getName(), updatedPerson.getAge(), updatedPerson.getEmail(), id);
     }
 
     public void delete(int id) {

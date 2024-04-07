@@ -9,26 +9,22 @@ public class Person {
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
 
-    @Min(value = 0, message = "Age should be greater than 0")
+    @Min(value = 1900, message = "Age should be greater than 1900")
     private int age;
 
     @NotEmpty(message = "Email should not be empty")
     @Email(message = "Email should be valid")
     private String email;
 
-    @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be in this format: Country, City, Postal Code(6 digits)")
-    private String address;
-
     public Person() {
 
     }
 
-    public Person(int id, String name, int age, String email, String address) {
+    public Person(int id, String name, int age, String email) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.email = email;
-        this.address = address;
     }
 
     public int getId() {
@@ -61,13 +57,5 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 }
