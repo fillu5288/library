@@ -2,11 +2,9 @@ package org.mksmv.Library.controllers;
 
 import org.mksmv.Library.dao.PersonDAO;
 import org.mksmv.Library.models.Person;
-import org.mksmv.Library.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class PeopleController {
 
     private final PersonDAO personDAO;
-    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
-        this.personDAO = personDAO;
-        this.personValidator = personValidator;
-    }
+    public PeopleController(PersonDAO personDAO) {this.personDAO = personDAO;}
 
     @GetMapping()
     public String index(Model model) {
@@ -30,7 +24,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String info(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.info(id));
         return "people/info";
     }
@@ -41,13 +35,7 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") @Validated Person person,
-                         BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
-
-        if (bindingResult.hasErrors())
-            return "people/new";
-
+    public String create(@ModelAttribute("person") @Validated Person person) {
         personDAO.save(person);
         return "redirect:/people";
     }
@@ -59,13 +47,8 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Validated Person person, BindingResult bindingResult,
+    public String update(@ModelAttribute("person") @Validated Person person,
                          @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
-
-        if (bindingResult.hasErrors())
-            return "people/edit";
-
         personDAO.update(id, person);
         return "redirect:/people";
     }
